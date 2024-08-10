@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math/rand"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -55,7 +57,7 @@ func canFall(matrix *[][]byte, row int, column int) bool {
 	}
 
 	cellBelow := (*matrix)[row+1][column]
-	if cellBelow == 1 {
+	if cellBelow >= 1 {
 		return false
 	}
 
@@ -79,7 +81,7 @@ func canRollLeft(matrix *[][]byte, row int, column int) bool {
 	}
 
 	leftDiagonalCellValue := (*matrix)[bottomRow][leftColumn]
-	if leftDiagonalCellValue == 1 {
+	if leftDiagonalCellValue >= 1 {
 		return false
 	}
 
@@ -103,7 +105,7 @@ func canRollRight(matrix *[][]byte, row int, column int) bool {
 	}
 
 	rightDiagonalCellValue := (*matrix)[bottomRow][rightColumn]
-	if rightDiagonalCellValue == 1 {
+	if rightDiagonalCellValue >= 1 {
 		return false
 	}
 
@@ -119,12 +121,10 @@ func main() {
 	const WIN_HEIGHT int32 = ROWS * CELL_SIZE
 
 	sandColors := map[int]rl.Color{
-		0: {237, 201, 175, 255},
-		1: {220, 189, 152, 255},
-		2: {210, 178, 140, 255},
-		3: {194, 165, 127, 255},
-		4: {172, 147, 106, 255},
-		5: {157, 130, 89, 255},
+		1: {237, 201, 175, 255},
+		2: {220, 189, 152, 255},
+		3: {210, 178, 140, 255},
+		4: {194, 165, 127, 255},
 	}
 
 	rl.InitWindow(WIN_WIDTH, WIN_HEIGHT, "Sandy")
@@ -142,7 +142,7 @@ func main() {
 
 		if rl.IsMouseButtonDown(rl.MouseLeftButton) {
 			row, column := convertMousePositionToGrid(&gameMatrix, rl.GetMousePosition(), CELL_SIZE)
-			gameMatrix[row][column] = 1
+			gameMatrix[row][column] = byte(rand.Intn(len(sandColors)-1)) + 1
 		}
 
 		// Check and apply rules
@@ -168,11 +168,10 @@ func main() {
 				cellValue := gameMatrix[r][c]
 				color := rl.Black
 
-				if cellValue == 1 {
-					color = sandColors[1]
+				if cellValue >= 1 {
+					color = sandColors[int(cellValue)]
 				}
 
-				// Draw cells
 				rl.DrawRectangle(c*CELL_SIZE, r*CELL_SIZE, CELL_SIZE, CELL_SIZE, color)
 			}
 		}
