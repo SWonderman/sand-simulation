@@ -43,9 +43,9 @@ func convertMousePositionToGrid(matrix *[][]byte, mousePosition rl.Vector2, cell
 		row = 0
 	} else if column < 0 {
 		column = 0
-	} else if row >= len((*matrix)) {
+	} else if row >= len((*matrix))-1 {
 		row = len((*matrix)) - 1
-	} else if column >= len((*matrix)[0]) {
+	} else if column >= len((*matrix)[0])-1 {
 		column = len((*matrix)[0]) - 1
 	}
 
@@ -119,13 +119,43 @@ func applyGravity(matrix *[][]byte, cell *Cell) {
 	}
 }
 
+func fillCells(matrix *[][]byte, mousePos *Cell, spread int, sandColorsCount int) {
+	for i := -spread; i <= spread; i++ {
+		for j := -spread; j <= spread; j++ {
+			if rand.Intn(10) >= 3 {
+				continue
+			}
+
+			newRow := mousePos.Row + i
+			newColumn := mousePos.Column + j
+
+			if newRow <= 0 {
+				newRow = 0
+			} else if newRow >= len((*matrix))-1 {
+				newRow = len((*matrix)) - 1
+			}
+
+			if newColumn <= 0 {
+				newColumn = 0
+			} else if newColumn >= len((*matrix)[0])-1 {
+				newColumn = len((*matrix)[0]) - 1
+			}
+
+			(*matrix)[newRow][newColumn] = byte(rand.Intn(sandColorsCount-1)) + 1
+		}
+	}
+}
+
 func main() {
-	const ROWS int32 = 40
-	const COLUMNS int32 = 80
+	const ROWS int32 = 80
+	const COLUMNS int32 = 160
 	const CELL_SIZE = 10
 
 	const WIN_WIDTH int32 = COLUMNS * CELL_SIZE
 	const WIN_HEIGHT int32 = ROWS * CELL_SIZE
+
+	const SPREAD_SIZE int = 5
+	const SPREAD int = int(SPREAD_SIZE / 2)
 
 	sandColors := map[int]rl.Color{
 		1: {237, 201, 175, 255},
@@ -149,7 +179,7 @@ func main() {
 
 		if rl.IsMouseButtonDown(rl.MouseLeftButton) {
 			row, column := convertMousePositionToGrid(&gameMatrix, rl.GetMousePosition(), CELL_SIZE)
-			gameMatrix[row][column] = byte(rand.Intn(len(sandColors)-1)) + 1
+			fillCells(&gameMatrix, &Cell{Row: row, Column: column}, SPREAD, len(sandColors))
 		}
 
 		// Check and apply rules
