@@ -6,6 +6,11 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+type Cell struct {
+	Row    int
+	Column int
+}
+
 func createEmptyMatrix(rows int32, columns int32) [][]byte {
 	matrix := make([][]byte, rows)
 	for m := range matrix {
@@ -47,16 +52,12 @@ func convertMousePositionToGrid(matrix *[][]byte, mousePosition rl.Vector2, cell
 	return row, column
 }
 
-func canFall(matrix *[][]byte, row int, column int) bool {
-	if (*matrix)[row][column] == 0 {
+func canFall(matrix *[][]byte, cell *Cell) bool {
+	if cell.Row+1 >= len((*matrix)) {
 		return false
 	}
 
-	if row+1 >= len((*matrix)) {
-		return false
-	}
-
-	cellBelow := (*matrix)[row+1][column]
+	cellBelow := (*matrix)[cell.Row+1][cell.Column]
 	if cellBelow >= 1 {
 		return false
 	}
@@ -64,13 +65,9 @@ func canFall(matrix *[][]byte, row int, column int) bool {
 	return true
 }
 
-func canRollLeft(matrix *[][]byte, row int, column int) bool {
-	if (*matrix)[row][column] == 0 {
-		return false
-	}
-
-	bottomRow := row + 1
-	leftColumn := column - 1
+func canRollLeft(matrix *[][]byte, cell *Cell) bool {
+	bottomRow := cell.Row + 1
+	leftColumn := cell.Column - 1
 
 	if bottomRow >= len((*matrix)) {
 		return false
@@ -88,13 +85,9 @@ func canRollLeft(matrix *[][]byte, row int, column int) bool {
 	return true
 }
 
-func canRollRight(matrix *[][]byte, row int, column int) bool {
-	if (*matrix)[row][column] == 0 {
-		return false
-	}
-
-	bottomRow := row + 1
-	rightColumn := column + 1
+func canRollRight(matrix *[][]byte, cell *Cell) bool {
+	bottomRow := cell.Row + 1
+	rightColumn := cell.Column + 1
 
 	if bottomRow >= len((*matrix)) {
 		return false
@@ -110,6 +103,20 @@ func canRollRight(matrix *[][]byte, row int, column int) bool {
 	}
 
 	return true
+}
+
+func applyGravity(matrix *[][]byte, cell *Cell) {
+	if (*matrix)[cell.Row][cell.Column] == 0 {
+		return
+	}
+
+	if canFall(matrix, cell) {
+		(*matrix)[cell.Row][cell.Column], (*matrix)[cell.Row+1][cell.Column] = (*matrix)[cell.Row+1][cell.Column], (*matrix)[cell.Row][cell.Column]
+	} else if canRollLeft(matrix, cell) {
+		(*matrix)[cell.Row][cell.Column], (*matrix)[cell.Row+1][cell.Column-1] = (*matrix)[cell.Row+1][cell.Column-1], (*matrix)[cell.Row][cell.Column]
+	} else if canRollRight(matrix, cell) {
+		(*matrix)[cell.Row][cell.Column], (*matrix)[cell.Row+1][cell.Column+1] = (*matrix)[cell.Row+1][cell.Column+1], (*matrix)[cell.Row][cell.Column]
+	}
 }
 
 func main() {
@@ -148,14 +155,7 @@ func main() {
 		// Check and apply rules
 		for r := ROWS - 1; r >= 0; r-- {
 			for c := COLUMNS - 1; c >= 0; c-- {
-				// Gravity
-				if canFall(&gameMatrix, int(r), int(c)) {
-					gameMatrix[r][c], gameMatrix[r+1][c] = gameMatrix[r+1][c], gameMatrix[r][c]
-				} else if canRollLeft(&gameMatrix, int(r), int(c)) {
-					gameMatrix[r][c], gameMatrix[r+1][c-1] = gameMatrix[r+1][c-1], gameMatrix[r][c]
-				} else if canRollRight(&gameMatrix, int(r), int(c)) {
-					gameMatrix[r][c], gameMatrix[r+1][c+1] = gameMatrix[r+1][c+1], gameMatrix[r][c]
-				}
+				applyGravity(&gameMatrix, &Cell{Row: int(r), Column: int(c)})
 			}
 		}
 
