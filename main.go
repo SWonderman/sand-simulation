@@ -110,15 +110,10 @@ func canRollRight(matrix *[][]byte, row int, column int) bool {
 	return true
 }
 
-func moveDown(matrix *[][]byte, row int, column int) {
-	(*matrix)[row][column] = 0
-	(*matrix)[row+1][column] = 1
-}
-
 func main() {
 	const ROWS int32 = 40
-	const COLUMNS int32 = 40
-	const CELL_SIZE = 15
+	const COLUMNS int32 = 80
+	const CELL_SIZE = 10
 
 	const WIN_WIDTH int32 = COLUMNS * CELL_SIZE
 	const WIN_HEIGHT int32 = ROWS * CELL_SIZE
@@ -135,7 +130,7 @@ func main() {
 	rl.InitWindow(WIN_WIDTH, WIN_HEIGHT, "Sandy")
 	defer rl.CloseWindow()
 
-	rl.SetTargetFPS(30)
+	rl.SetTargetFPS(60)
 
 	gameMatrix := createEmptyMatrix(ROWS, COLUMNS)
 
@@ -179,10 +174,6 @@ func main() {
 
 				// Draw cells
 				rl.DrawRectangle(c*CELL_SIZE, r*CELL_SIZE, CELL_SIZE, CELL_SIZE, color)
-
-				// Draw grid
-				rl.DrawLine(c*CELL_SIZE, 0, c*CELL_SIZE, WIN_HEIGHT, rl.NewColor(130, 130, 130, 100))
-				rl.DrawLine(0, r*CELL_SIZE, WIN_WIDTH, r*CELL_SIZE, rl.NewColor(130, 130, 130, 100))
 			}
 		}
 
