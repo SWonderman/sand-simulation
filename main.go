@@ -23,6 +23,7 @@ func main() {
 	voidFamily := elements.NewVoidFamily()
 	sandFamily := elements.NewSandFamily()
 	stoneFamily := elements.NewStoneFamily()
+	waterFamily := elements.NewWaterFamily()
 
 	var selectedFamily elements.ElementFamily
 	selectedFamily = stoneFamily
@@ -45,6 +46,9 @@ func main() {
 		} else if rl.IsKeyDown(rl.KeyThree) {
 			selectedFamily = voidFamily
 			currentlySeletedFamily = "Void"
+		} else if rl.IsKeyDown(rl.KeyFour) {
+			selectedFamily = waterFamily
+			currentlySeletedFamily = "Water"
 		}
 
 		if rl.IsMouseButtonDown(rl.MouseLeftButton) {
