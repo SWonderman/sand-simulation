@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sw/sandy/elements"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -21,8 +22,11 @@ func main() {
 
 	voidFamily := elements.NewVoidFamily()
 	sandFamily := elements.NewSandFamily()
+	stoneFamily := elements.NewStoneFamily()
 
-	selectedFamily := sandFamily
+	var selectedFamily elements.ElementFamily
+	selectedFamily = stoneFamily
+	currentlySeletedFamily := "Stone"
 
 	matrix := elements.NewGrid(int(COLUMNS), int(ROWS), voidFamily)
 
@@ -30,6 +34,17 @@ func main() {
 
 		if rl.IsKeyDown(rl.KeyQ) {
 			matrix.Clear()
+		}
+
+		if rl.IsKeyDown(rl.KeyOne) {
+			selectedFamily = stoneFamily
+			currentlySeletedFamily = "Stone"
+		} else if rl.IsKeyDown(rl.KeyTwo) {
+			selectedFamily = sandFamily
+			currentlySeletedFamily = "Sand"
+		} else if rl.IsKeyDown(rl.KeyThree) {
+			selectedFamily = voidFamily
+			currentlySeletedFamily = "Void"
 		}
 
 		if rl.IsMouseButtonDown(rl.MouseLeftButton) {
@@ -57,6 +72,8 @@ func main() {
 				rl.DrawRectangle(c*CELL_SIZE, r*CELL_SIZE, CELL_SIZE, CELL_SIZE, color)
 			}
 		}
+
+		rl.DrawText(fmt.Sprintf("Selected: %s", currentlySeletedFamily), 10, 10, 15, rl.RayWhite)
 
 		rl.EndDrawing()
 	}
