@@ -1,8 +1,6 @@
 package elements
 
 import (
-	"math/rand"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -102,30 +100,9 @@ func (grid *Grid) SwapElements(fromElement Element, toElement Element) {
 
 func (grid *Grid) FillCells(currentMousePosition rl.Vector2, cellSize int32, elementFamily ElementFamily) {
 	mousePos := grid.convertMousePositionToGrid(currentMousePosition, cellSize)
-	spread := elementFamily.GetSpread()
+	newElements := elementFamily.CreateElements(grid, mousePos)
 
-	for i := -spread; i <= spread; i++ {
-		for j := -spread; j <= spread; j++ {
-			if rand.Intn(10) >= 3 {
-				continue
-			}
-
-			newRow := mousePos.Row + i
-			newColumn := mousePos.Column + j
-
-			if newRow <= 0 {
-				newRow = 0
-			} else if newRow >= grid.Height-1 {
-				newRow = grid.Height - 1
-			}
-
-			if newColumn <= 0 {
-				newColumn = 0
-			} else if newColumn >= grid.Width-1 {
-				newColumn = grid.Width - 1
-			}
-
-			grid.SetElement(elementFamily.CreateElement(&Cell{Row: newRow, Column: newColumn}))
-		}
+	for _, ele := range newElements {
+		grid.SetElement(ele)
 	}
 }

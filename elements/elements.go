@@ -15,8 +15,9 @@ type Element interface {
 type ElementType int
 
 const (
-	Void ElementType = iota
-	Sand ElementType = iota
+	Void  ElementType = iota
+	Sand  ElementType = iota
+	Stone ElementType = iota
 )
 
 type ElementFamily interface {
@@ -25,5 +26,6 @@ type ElementFamily interface {
 	GetColors() map[int]rl.Color
 	SelectRandomColor() rl.Color
 	CreateElement(cell *Cell) Element
+	CreateElements(grid *Grid, cell *Cell) []Element
 	// IsMovable() bool // TODO: How about adding this?
 }

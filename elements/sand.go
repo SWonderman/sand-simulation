@@ -94,3 +94,35 @@ func (sandFamily *SandFamily) CreateElement(cell *Cell) Element {
 		color:  sandFamily.SelectRandomColor(),
 	}
 }
+
+func (sandFamily *SandFamily) CreateElements(grid *Grid, cell *Cell) []Element {
+	createdElements := []Element{}
+	spread := sandFamily.GetSpread()
+
+	for i := -spread; i <= spread; i++ {
+		for j := -spread; j <= spread; j++ {
+			if rand.Intn(10) >= 3 {
+				continue
+			}
+
+			newRow := cell.Row + i
+			newColumn := cell.Column + j
+
+			if newRow <= 0 {
+				newRow = 0
+			} else if newRow >= grid.Height-1 {
+				newRow = grid.Height - 1
+			}
+
+			if newColumn <= 0 {
+				newColumn = 0
+			} else if newColumn >= grid.Width-1 {
+				newColumn = grid.Width - 1
+			}
+
+			createdElements = append(createdElements, sandFamily.CreateElement(&Cell{Row: newRow, Column: newColumn}))
+		}
+	}
+
+	return createdElements
+}
