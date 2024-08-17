@@ -38,9 +38,17 @@ func (sandElement *SandElement) Update(matrix *Grid) {
 	elementDiagonallyRight := matrix.GetElement(&Cell{Row: cell.Row + 1, Column: cell.Column + 1})
 	elementDiagonallyLeft := matrix.GetElement(&Cell{Row: cell.Row + 1, Column: cell.Column - 1})
 
-	// Sand is falling!
 	if elementBelow.GetFamily().GetType() == Void {
 		matrix.SwapElements(sandElement, elementBelow)
+    } else if elementBelow.GetFamily().GetType() == Water {
+        decider := rand.Intn(10)
+        if decider == 0 || decider == 1 {
+		    matrix.SwapElements(sandElement, elementDiagonallyRight)
+        } else if decider == 4 || decider == 5 {
+		    matrix.SwapElements(sandElement, elementDiagonallyLeft)
+        } else {
+            matrix.SwapElements(sandElement, elementBelow)
+        }
 	} else if elementDiagonallyRight != nil && elementDiagonallyRight.GetFamily().GetType() == Void {
 		matrix.SwapElements(sandElement, elementDiagonallyRight)
 	} else if elementDiagonallyLeft != nil && elementDiagonallyLeft.GetFamily().GetType() == Void {
