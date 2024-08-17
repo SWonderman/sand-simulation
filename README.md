@@ -5,4 +5,6 @@ The simulation offers three elements - sand, stone, and water. It is possible to
 
 The whole screen can be cleared completely by clicking `q`.
 
-The simulation was inspired by the [Exploring the Teach and Design of Noita](https://www.youtube.com/watch?v=prXuyMCgbTc&t=992s) talk from GDC 2019.
+The simulation was inspired by the [Exploring the Tech and Design of Noita](https://www.youtube.com/watch?v=prXuyMCgbTc&t=992s) talk from GDC 2019.
+
+https://github.com/user-attachments/assets/34b261b6-1d29-4a3d-9721-ecdee56a9fd4
