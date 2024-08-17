@@ -18,12 +18,14 @@ const (
 	Void  ElementType = iota
 	Sand  ElementType = iota
 	Stone ElementType = iota
+	Water ElementType = iota
 )
 
 type ElementFamily interface {
 	GetType() ElementType
 	GetSpread() int
 	GetColors() map[int]rl.Color
+    GetName() string
 	SelectRandomColor() rl.Color
 	CreateElement(cell *Cell) Element
 	CreateElements(grid *Grid, cell *Cell) []Element

@@ -58,6 +58,10 @@ func (voidFamily *VoidFamily) GetColors() map[int]rl.Color {
 	return voidFamily.colors
 }
 
+func (voidFamily *VoidFamily) GetName() string {
+	return "Void"
+}
+
 func (voidFamily *VoidFamily) SelectRandomColor() rl.Color {
 	return voidFamily.colors[1]
 }

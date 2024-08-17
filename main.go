@@ -27,7 +27,6 @@ func main() {
 
 	var selectedFamily elements.ElementFamily
 	selectedFamily = stoneFamily
-	currentlySeletedFamily := "Stone"
 
 	matrix := elements.NewGrid(int(COLUMNS), int(ROWS), voidFamily)
 
@@ -39,16 +38,12 @@ func main() {
 
 		if rl.IsKeyDown(rl.KeyOne) {
 			selectedFamily = stoneFamily
-			currentlySeletedFamily = "Stone"
 		} else if rl.IsKeyDown(rl.KeyTwo) {
 			selectedFamily = sandFamily
-			currentlySeletedFamily = "Sand"
 		} else if rl.IsKeyDown(rl.KeyThree) {
 			selectedFamily = voidFamily
-			currentlySeletedFamily = "Void"
 		} else if rl.IsKeyDown(rl.KeyFour) {
 			selectedFamily = waterFamily
-			currentlySeletedFamily = "Water"
 		}
 
 		if rl.IsMouseButtonDown(rl.MouseLeftButton) {
@@ -77,7 +72,7 @@ func main() {
 			}
 		}
 
-		rl.DrawText(fmt.Sprintf("Selected: %s", currentlySeletedFamily), 10, 10, 15, rl.RayWhite)
+		rl.DrawText(fmt.Sprintf("Selected: %s", selectedFamily.GetName()), 10, 10, 15, rl.RayWhite)
 
 		rl.EndDrawing()
 	}

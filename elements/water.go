@@ -25,8 +25,32 @@ func (waterElement *WaterElement) GetFamily() ElementFamily {
 }
 
 func (waterElement *WaterElement) Update(matrix *Grid) {
-	// TODO: impl!
-	return
+	cell := waterElement.GetCell()
+	// if matrix.GetElement(cell) == nil {
+	// 	return
+	// }
+
+	elementBelow := matrix.GetElement(&Cell{Row: cell.Row + 1, Column: cell.Column})
+	// if elementBelow == nil {
+	// 	return
+	// }
+
+	elementDiagonallyRight := matrix.GetElement(&Cell{Row: cell.Row + 1, Column: cell.Column + 1})
+	elementDiagonallyLeft := matrix.GetElement(&Cell{Row: cell.Row + 1, Column: cell.Column - 1})
+	elementRight := matrix.GetElement(&Cell{Row: cell.Row, Column: cell.Column + 1})
+	elementLeft := matrix.GetElement(&Cell{Row: cell.Row, Column: cell.Column - 1})
+
+	if elementBelow != nil && elementBelow.GetFamily().GetType() == Void {
+		matrix.SwapElements(waterElement, elementBelow)
+	} else if elementDiagonallyLeft != nil && elementDiagonallyLeft.GetFamily().GetType() == Void {
+		matrix.SwapElements(waterElement, elementDiagonallyLeft)
+	} else if elementDiagonallyRight != nil && elementDiagonallyRight.GetFamily().GetType() == Void {
+		matrix.SwapElements(waterElement, elementDiagonallyRight)
+	} else if elementLeft != nil && elementLeft.GetFamily().GetType() == Void {
+		matrix.SwapElements(waterElement, elementLeft)
+	} else if elementRight != nil && elementRight.GetFamily().GetType() == Void {
+		matrix.SwapElements(waterElement, elementRight)
+	}
 }
 
 func (waterElement *WaterElement) GetColor() rl.Color {
@@ -41,7 +65,7 @@ type WaterFamily struct {
 
 func NewWaterFamily() *WaterFamily {
 	return &WaterFamily{
-		elementType: Void,
+		elementType: Water,
 		spread:      2,
 		colors: map[int]rl.Color{
 			1: {155, 206, 235, 255},
@@ -62,6 +86,10 @@ func (waterFamily *WaterFamily) GetSpread() int {
 
 func (waterFamily *WaterFamily) GetColors() map[int]rl.Color {
 	return waterFamily.colors
+}
+
+func (waterFamily *WaterFamily) GetName() string { 
+	return "Water"
 }
 
 func (waterFamily *WaterFamily) SelectRandomColor() rl.Color {

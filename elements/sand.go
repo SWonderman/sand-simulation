@@ -83,6 +83,10 @@ func (sandFamily *SandFamily) GetColors() map[int]rl.Color {
 	return sandFamily.colors
 }
 
+func (sandFamily *SandFamily) GetName() string {
+	return "Sand"
+}
+
 func (sandFamily *SandFamily) SelectRandomColor() rl.Color {
 	return sandFamily.colors[rand.Intn(len(sandFamily.colors)-1)+1]
 }

@@ -63,6 +63,10 @@ func (stoneFamily *StoneFamily) GetColors() map[int]rl.Color {
 	return stoneFamily.colors
 }
 
+func (stoneFamily *StoneFamily) GetName() string {
+	return "Stone"
+}
+
 func (stoneFamily *StoneFamily) SelectRandomColor() rl.Color {
 	return stoneFamily.colors[rand.Intn(len(stoneFamily.colors)-1)+1]
 }
