@@ -26,7 +26,7 @@ func main() {
 	waterFamily := elements.NewWaterFamily()
 
 	var selectedFamily elements.ElementFamily
-	selectedFamily = stoneFamily
+	selectedFamily = sandFamily 
 
 	matrix := elements.NewGrid(int(COLUMNS), int(ROWS), voidFamily)
 
@@ -37,13 +37,13 @@ func main() {
 		}
 
 		if rl.IsKeyDown(rl.KeyOne) {
-			selectedFamily = stoneFamily
-		} else if rl.IsKeyDown(rl.KeyTwo) {
 			selectedFamily = sandFamily
+		} else if rl.IsKeyDown(rl.KeyTwo) {
+			selectedFamily = stoneFamily
 		} else if rl.IsKeyDown(rl.KeyThree) {
-			selectedFamily = voidFamily
-		} else if rl.IsKeyDown(rl.KeyFour) {
 			selectedFamily = waterFamily
+		} else if rl.IsKeyDown(rl.KeyFour) {
+			selectedFamily = voidFamily
 		}
 
 		if rl.IsMouseButtonDown(rl.MouseLeftButton) {
