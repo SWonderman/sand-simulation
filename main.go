@@ -26,7 +26,7 @@ func main() {
 	waterFamily := elements.NewWaterFamily()
 
 	var selectedFamily elements.ElementFamily
-	selectedFamily = sandFamily 
+	selectedFamily = sandFamily
 
 	matrix := elements.NewGrid(int(COLUMNS), int(ROWS), voidFamily)
 

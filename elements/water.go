@@ -7,11 +7,11 @@ import (
 )
 
 type WaterElement struct {
-	cell         *Cell
-	family       ElementFamily
-	color        rl.Color
-    disperseRate int
-    horizontalMovement *rl.Vector2
+	cell               *Cell
+	family             ElementFamily
+	color              rl.Color
+	disperseRate       int
+	horizontalMovement *rl.Vector2
 }
 
 func (waterElement *WaterElement) GetCell() *Cell {
@@ -37,34 +37,34 @@ func (waterElement *WaterElement) Update(matrix *Grid) {
 
 	if elementBelow != nil && elementBelow.GetFamily().GetType() == Void {
 		matrix.SwapElements(waterElement, elementBelow)
-        waterElement.horizontalMovement = nil
+		waterElement.horizontalMovement = nil
 	} else if elementDiagonallyLeft != nil && elementDiagonallyLeft.GetFamily().GetType() == Void {
-        waterElement.applyDispersion(matrix, elementDiagonallyLeft, &rl.Vector2{X: -1, Y: 1})
-        waterElement.horizontalMovement = nil
+		waterElement.applyDispersion(matrix, elementDiagonallyLeft, &rl.Vector2{X: -1, Y: 1})
+		waterElement.horizontalMovement = nil
 	} else if elementDiagonallyRight != nil && elementDiagonallyRight.GetFamily().GetType() == Void {
-        waterElement.applyDispersion(matrix, elementDiagonallyRight, &rl.Vector2{X: 1, Y: 1})
-        waterElement.horizontalMovement = nil
-    } else {
-        if elementBelow != nil && elementBelow.GetFamily().GetType() == Water && waterElement.horizontalMovement != nil {
-            if elementLeft != nil && elementLeft.GetFamily().GetType() == Void && waterElement.horizontalMovement.X == -1 {
-                waterElement.applyDispersion(matrix, elementLeft, waterElement.horizontalMovement)
-            } else if elementRight != nil && elementRight.GetFamily().GetType() == Void && waterElement.horizontalMovement.X == 1 {
-                waterElement.applyDispersion(matrix, elementRight, waterElement.horizontalMovement)
-            }
-        } else {
-            decider := rand.Intn(2)
+		waterElement.applyDispersion(matrix, elementDiagonallyRight, &rl.Vector2{X: 1, Y: 1})
+		waterElement.horizontalMovement = nil
+	} else {
+		if elementBelow != nil && elementBelow.GetFamily().GetType() == Water && waterElement.horizontalMovement != nil {
+			if elementLeft != nil && elementLeft.GetFamily().GetType() == Void && waterElement.horizontalMovement.X == -1 {
+				waterElement.applyDispersion(matrix, elementLeft, waterElement.horizontalMovement)
+			} else if elementRight != nil && elementRight.GetFamily().GetType() == Void && waterElement.horizontalMovement.X == 1 {
+				waterElement.applyDispersion(matrix, elementRight, waterElement.horizontalMovement)
+			}
+		} else {
+			decider := rand.Intn(2)
 
-            if elementLeft != nil && elementLeft.GetFamily().GetType() == Void && decider == 0 {
-                leftMovement := &rl.Vector2{X: -1, Y: 0}
-                waterElement.applyDispersion(matrix, elementLeft, leftMovement)
-                waterElement.horizontalMovement = leftMovement
-            } else if elementRight != nil && elementRight.GetFamily().GetType() == Void && decider == 1 {
-                rightMovement := &rl.Vector2{X: 1, Y: 0}
-                waterElement.applyDispersion(matrix, elementRight, rightMovement)
-                waterElement.horizontalMovement = rightMovement
-            }
-        }
-    }
+			if elementLeft != nil && elementLeft.GetFamily().GetType() == Void && decider == 0 {
+				leftMovement := &rl.Vector2{X: -1, Y: 0}
+				waterElement.applyDispersion(matrix, elementLeft, leftMovement)
+				waterElement.horizontalMovement = leftMovement
+			} else if elementRight != nil && elementRight.GetFamily().GetType() == Void && decider == 1 {
+				rightMovement := &rl.Vector2{X: 1, Y: 0}
+				waterElement.applyDispersion(matrix, elementRight, rightMovement)
+				waterElement.horizontalMovement = rightMovement
+			}
+		}
+	}
 }
 
 func (waterElement *WaterElement) GetColor() rl.Color {
@@ -72,19 +72,19 @@ func (waterElement *WaterElement) GetColor() rl.Color {
 }
 
 func (waterElement *WaterElement) applyDispersion(matrix *Grid, element Element, movement *rl.Vector2) {
-    currentCell := element.GetCell()
-    currentRow := currentCell.Row
-    currentColumn := currentCell.Column
-    for _ = range waterElement.disperseRate {
-        adjacentElement := matrix.GetElement(&Cell{Row: currentRow, Column: currentColumn})
-        if adjacentElement != nil && adjacentElement.GetFamily().GetType() == Void {
-            matrix.SwapElements(waterElement, adjacentElement)
-            currentRow += int(movement.Y)
-            currentColumn += int(movement.X)
-        } else {
-            return
-        }
-    }
+	currentCell := element.GetCell()
+	currentRow := currentCell.Row
+	currentColumn := currentCell.Column
+	for _ = range waterElement.disperseRate {
+		adjacentElement := matrix.GetElement(&Cell{Row: currentRow, Column: currentColumn})
+		if adjacentElement != nil && adjacentElement.GetFamily().GetType() == Void {
+			matrix.SwapElements(waterElement, adjacentElement)
+			currentRow += int(movement.Y)
+			currentColumn += int(movement.X)
+		} else {
+			return
+		}
+	}
 }
 
 type WaterFamily struct {
@@ -118,7 +118,7 @@ func (waterFamily *WaterFamily) GetColors() map[int]rl.Color {
 	return waterFamily.colors
 }
 
-func (waterFamily *WaterFamily) GetName() string { 
+func (waterFamily *WaterFamily) GetName() string {
 	return "Water"
 }
 
@@ -131,8 +131,8 @@ func (waterFamily *WaterFamily) CreateElement(cell *Cell) Element {
 		cell:               cell,
 		family:             waterFamily,
 		color:              waterFamily.SelectRandomColor(),
-        disperseRate:       3,
-        horizontalMovement: nil,
+		disperseRate:       3,
+		horizontalMovement: nil,
 	}
 }
 
